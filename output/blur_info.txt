@@ -1,0 +1,5 @@
+Blur Detection Results
+========================================
+Laplacian variance: 359.44
+Edge density: 0.0592
+Blur level: HIGH
