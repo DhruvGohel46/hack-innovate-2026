@@ -16,285 +16,263 @@
 
 
 
-**RailVision AI** is a state-of-the-art automated video restoration and Optical Character Recognition (OCR) pipeline designed for high-speed railway logistics. It specializes in extracting wagon identifiers from noisy, blurry, and low-light footage captured by trackside cameras.
+Below is a **clean, professional, hackathon-grade README.md** rewritten from your content.
+No emojis, no casual tone, proper headings, architecture clarity, and industry-style structure.
+
+You can **copy–paste this directly into README.md**.
 
 ---
 
+# RailVision AI
 
-
-🎯 Problem Statement
-
-Modern railway logistics depend on accurate wagon number detection in real time.
-However, trackside surveillance cameras face major challenges:
-
-Motion Blur – fast-moving trains
-
-Low Light & Noise – night operations
-
-Camera Vibration – unstable mounts
-
-Real-Time Constraints – limited processing time per frame
-
-
-Traditional OCR systems fail because they operate directly on degraded frames.
-
-🔥 RailVision AI Solution
-
-RailVision AI solves this by introducing an intelligent, real-time video restoration pipeline:
-
-1. Analyze every frame quality
-
-
-2. Conditionally restore only degraded frames
-
-
-3. Enhance visual clarity
-
-
-4. Run OCR at controlled intervals
-
-
-
-This ensures high accuracy with low latency, making the system suitable for real-time deployment.
-
+**Automated Video Restoration and OCR Pipeline for High-Speed Railway Logistics**
 
 ---
 
-🚀 Key Features
+## Abstract
 
-🧠 Intelligent Frame Processing
+RailVision AI is an intelligent, real-time video restoration and Optical Character Recognition (OCR) pipeline designed for high-speed railway logistics. The system focuses on accurate extraction of railway wagon identifiers from degraded video footage captured by trackside surveillance cameras.
 
-Blur Detection (Laplacian Variance)
-Each frame is classified as:
-
-Low Blur
-
-Medium Blur
-
-High Blur
-
-
-Conditional Deblurring (NAFNet)
-Only medium and high blur frames are passed to the deep deblurring model, reducing unnecessary compute.
-
-Super-Resolution Enhancement (Real-ESRGAN)
-All frames (deblurred + low-blur frames) are enhanced to improve text clarity.
-
-Frame Ordering & Synchronization
-Processed frames are reordered to maintain video integrity.
-
-Throttled OCR (EasyOCR)
-OCR runs on every 5th–6th frame, sufficient for video text while reducing latency.
-
-
+By combining frame-quality analysis, conditional restoration, and optimized OCR scheduling, RailVision AI achieves high recognition accuracy while maintaining low latency, making it suitable for real-world deployment in railway monitoring systems.
 
 ---
 
-⚡ Performance Optimizations
+## Problem Statement
 
-Selective Model Invocation
-Heavy models run only when needed.
+Modern railway logistics relies heavily on accurate and timely identification of wagon numbers. However, video feeds from trackside cameras suffer from multiple real-world degradations:
 
-Frame Sampling for OCR
-OCR runs at lower frequency without losing meaningful information.
+* **Motion Blur** caused by high-speed trains
+* **Low Light and Noise** during night operations
+* **Camera Vibration** due to unstable mounting
+* **Real-Time Constraints** limiting per-frame processing time
 
-Real-Time Friendly Design
-Suitable for live or near-real-time railway monitoring.
-
-
+Traditional OCR systems operate directly on raw frames and fail under these conditions, resulting in poor accuracy and unreliable outputs.
 
 ---
 
-🏗️ System Architecture (Updated)
+## Proposed Solution
 
+RailVision AI introduces a **selective, quality-aware video restoration pipeline** that processes frames intelligently before applying OCR.
+
+Key design principles include:
+
+* Frame-wise quality analysis
+* Conditional invocation of computationally expensive models
+* Visual enhancement prior to OCR
+* Reduced OCR frequency without loss of semantic information
+
+This approach ensures robust performance under degraded conditions while remaining computationally efficient.
+
+---
+
+## Key Features
+
+### Intelligent Frame Processing
+
+**Blur Detection**
+Each frame is analyzed using Laplacian Variance and classified into:
+
+* Low Blur
+* Medium Blur
+* High Blur
+
+**Conditional Deblurring (NAFNet)**
+Only frames categorized as Medium or High Blur are passed through the deep deblurring model, reducing unnecessary computation.
+
+**Super-Resolution Enhancement (Real-ESRGAN)**
+All frames (both deblurred and non-deblurred) undergo super-resolution enhancement to improve text clarity.
+
+**Frame Ordering and Synchronization**
+Processed frames are reordered to preserve the original temporal sequence of the video.
+
+**Throttled OCR Execution (EasyOCR)**
+OCR is performed on every 5th–6th frame, which is sufficient for continuous video text while significantly reducing processing latency.
+
+---
+
+## Performance Optimizations
+
+* Selective invocation of heavy deep learning models
+* Reduced OCR frequency without compromising detection accuracy
+* Pipeline designed for real-time or near-real-time deployment
+
+---
+
+## System Architecture
+
+```
 Input Video
-   ↓
+     ↓
 Frame Extraction
-   ↓
+     ↓
 Blur Detection (Low / Medium / High)
-   ↓
+     ↓
 Medium + High Blur Frames ──► NAFNet Deblurring
-Low Blur Frames ───────────► Skip Deblur
-   ↓
-All Frames ──► Real-ESRGAN Enhancement
-   ↓
+Low Blur Frames ───────────► Skip Deblurring
+     ↓
+All Frames
+     ↓
+Real-ESRGAN Super-Resolution
+     ↓
 Frame Reordering
-   ↓
-Every 5–6 Frames ──► EasyOCR
-   ↓
-Wagon Number + Confidence
-   ↓
-React Dashboard
-
+     ↓
+OCR on Every 5–6 Frames (EasyOCR)
+     ↓
+Wagon Identifier + Confidence Score
+     ↓
+React-Based Monitoring Dashboard
+```
 
 ---
 
-📂 Project Structure (ROI Removed)
+## Project Structure
 
+```
 hack-innovate-2026/
+│
 ├── backend/
-│   ├── app.py                 # Flask API
-│   ├── main_pipeline.py       # Core video pipeline
-│   ├── blur_detection/        # Laplacian variance logic
-│   ├── deblur/                # NAFNet inference
-│   ├── enhancement/           # Real-ESRGAN inference
-│   ├── ocr/                   # EasyOCR logic
+│   ├── app.py                 # Flask API entry point
+│   ├── main_pipeline.py       # Core video processing pipeline
+│   ├── blur_detection/        # Laplacian variance-based blur detection
+│   ├── deblur/                # NAFNet inference logic
+│   ├── enhancement/           # Real-ESRGAN inference logic
+│   ├── ocr/                   # EasyOCR processing
 │   ├── utils/                 # Frame handling utilities
 │   └── requirements.txt
 │
 ├── railguard-frontend/
-│   ├── src/
-│   ├── public/
+│   ├── src/                   # React application source
+│   ├── public/                # Static assets
 │   └── package.json
 │
 └── README.md
-
-
----
-
-🛠️ Tech Stack
-
-Backend
-
-Python 3.9+
-
-Flask
-
-PyTorch
-
-OpenCV
-
-EasyOCR
-
-
-Models Used
-
-Blur Detection – Laplacian Variance
-
-Deblurring – NAFNet (Image Restoration)
-
-Enhancement – Real-ESRGAN
-
-OCR – EasyOCR
-
-
-Frontend
-
-React 18
-
-Modern dashboard UI
-
-
+```
 
 ---
 
-🧪 Main Processing Pipeline
+## Technology Stack
 
+### Backend
+
+* Python 3.9+
+* Flask
+* PyTorch
+* OpenCV
+* EasyOCR
+
+### Models
+
+* **Blur Detection:** Laplacian Variance
+* **Deblurring:** NAFNet
+* **Super-Resolution:** Real-ESRGAN
+* **OCR:** EasyOCR
+
+### Frontend
+
+* React 18
+* Modern dashboard-based UI
+
+---
+
+## Processing Pipeline
+
+```
 Video Input
- → Frame Split
+ → Frame Extraction
  → Blur Detection (Low / Medium / High)
- → Medium + High → NAFNet Deblur
- → Low → Skip Deblur
- → All Frames → Real-ESRGAN Enhance
- → Frame Ordering
- → Every 6th Frame → EasyOCR
- → Output: Text + Confidence
-
-
----
-
-🚀 Getting Started
-
-🔧 Prerequisites
-
-Python 3.9+
-
-GPU recommended (CPU supported)
-
-
+ → Medium + High Blur Frames → NAFNet Deblurring
+ → Low Blur Frames → Skip Deblurring
+ → All Frames → Real-ESRGAN Enhancement
+ → Frame Reordering
+ → OCR on Every 6th Frame
+ → Output: Text + Confidence Score
+```
 
 ---
 
-1️⃣ Backend Setup
+## Getting Started
 
+### Prerequisites
+
+* Python 3.9 or higher
+* GPU recommended (CPU supported)
+
+---
+
+### Backend Setup
+
+```bash
 cd backend
 pip install -r requirements.txt
-
-📥 Download Model Weights
-
-NAFNet (Deblurring)
-Download and place in backend/deblur/:
-
-NAFNet-GoPro-width64.pth
-
-🔗 https://huggingface.co/mikestealth/nafnet-models/blob/main/NAFNet-GoPro-width64.pth
-
+```
 
 ---
 
-Real-ESRGAN (Enhancement)
-Download and place in backend/enhancement/:
+### Model Weights
 
-RealESRGAN_x4plus.pth
+**NAFNet (Deblurring)**
+Place the following file in `backend/deblur/`:
 
-🔗 https://huggingface.co/lllyasviel/Annotators/blob/main/RealESRGAN_x4plus.pth
+* `NAFNet-GoPro-width64.pth`
+  [https://huggingface.co/mikestealth/nafnet-models/blob/main/NAFNet-GoPro-width64.pth](https://huggingface.co/mikestealth/nafnet-models/blob/main/NAFNet-GoPro-width64.pth)
 
+**Real-ESRGAN (Enhancement)**
+Place the following file in `backend/enhancement/`:
+
+* `RealESRGAN_x4plus.pth`
+  [https://huggingface.co/lllyasviel/Annotators/blob/main/RealESRGAN_x4plus.pth](https://huggingface.co/lllyasviel/Annotators/blob/main/RealESRGAN_x4plus.pth)
 
 ---
 
-▶️ Run Pipeline Manually
+### Run Pipeline Manually
 
+```bash
 python main_pipeline.py --input input_video/test.mp4 --output output.mp4
-
-▶️ Run Flask API
-
-python app.py
-
+```
 
 ---
 
-2️⃣ Frontend Setup
+### Run Flask API
 
+```bash
+python app.py
+```
+
+---
+
+### Frontend Setup
+
+```bash
 cd railguard-frontend
 npm install
 npm run dev
-
-
----
-
-📊 Optimization Results
-
-Metric	Traditional OCR	RailVision AI
-
-Deblur Invocation	Every frame	Only medium & high blur
-OCR Frequency	Every frame	Every 6th frame
-Processing Speed	Slow	4–5× faster
-OCR Accuracy	Low	High & Stable
-
-
+```
 
 ---
 
-🔮 Future Roadmap
+## Performance Comparison
 
-[ ] Video-aware deblurring (BasicVSR++)
-
-[ ] TensorRT acceleration
-
-[ ] Live RTSP stream support
-
-[ ] Edge deployment (Jetson)
-
-
+| Metric           | Traditional OCR | RailVision AI                  |
+| ---------------- | --------------- | ------------------------------ |
+| Deblurring       | Every frame     | Only medium & high blur frames |
+| OCR Frequency    | Every frame     | Every 6th frame                |
+| Processing Speed | Slow            | 4–5× faster                    |
+| OCR Accuracy     | Low             | High and stable                |
 
 ---
 
-<p align="center">
-Built with ❤️ for <strong>Hack Innovate 2026</strong><br/>
-by <strong>Team Unk0wn C0ders</strong>
-</p>
+## Future Roadmap
+
+* Video-aware deblurring using BasicVSR++
+* TensorRT acceleration
+* Live RTSP stream processing
+* Edge deployment on NVIDIA Jetson devices
+
 ---
 
+## Team
 
+**Team Unk0wn C0ders**
+Built for **Hack Innovate 2026**
 
-Bas bol 🔥
+---
