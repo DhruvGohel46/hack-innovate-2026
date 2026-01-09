@@ -178,6 +178,26 @@ Video Input → Frame Extraction → Blur Detection (Low / Medium / High) → Me
 
 ```
 
+# config.py – Optimized for 96.2% OCR Accuracy + 52 FPS
+
+| **Category** | **Parameter** | **Value** | **Description / Notes** |
+|-------------|---------------|-----------|--------------------------|
+| **Blur Detection** | LOW_BLUR_THRESHOLD | 500 | Tested on railway footage |
+| | MEDIUM_BLUR_THRESHOLD | 100 | Balanced for 60–120 km/h speeds |
+| **NAFNet (Deblurring)** | NAFNET_WIDTH | 64 | Do not change (model trained with this) |
+| | ENC_BLOCKS | [1, 1, 1, 28] | Do not change (pretrained architecture) |
+| | DROPOUT | 0.0 | No dropout during inference |
+| **Real-ESRGAN** | ESRGAN_SCALE | 2 | 2× upscale (speed–quality balance) |
+| | ESRGAN_TILE | 0 | No tiling (faster on RTX 3050) |
+| | ESRGAN_HALF | True | FP16 for ~2× speedup |
+| **Pipeline** | SKIP_FRAMES | 1 | Process every frame |
+| | ENHANCE_SCALE | 2 | Match ESRGAN scale |
+| | OCR_INTERVAL | 6 | Run OCR every 6th frame |
+| | PROCESS_BLURRED_ONLY | True | Saves computation |
+| **Performance Targets** | TARGET_FPS | 52 | Frames per second |
+| | TARGET_OCR | 96.2 | OCR accuracy (%) |
+
+
 ---
 
 ## Getting Started
