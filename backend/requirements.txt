@@ -24,3 +24,8 @@ ffmpeg-python>=0.2.0
 
 # OCR: For text detection and recognition
 easyocr>=1.7.0
+
+# Flask API
+flask>=2.3.0
+flask-cors>=4.0.0
+werkzeug>=2.3.0

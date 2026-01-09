@@ -1,0 +1,133 @@
+# -----------------------------
+# OS
+# -----------------------------
+# Windows
+Thumbs.db
+[Dd]esktop.ini
+ehthumbs.db
+Icon?
+
+# macOS
+.DS_Store
+
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+*.pyc
+*.pyo
+*.pyd
+
+# Virtualenv and environment files
+.venv/
+venv/
+ENV/
+env/
+venv.bak/
+
+# Python tooling
+.mypy_cache/
+.pytest_cache/
+coverage.xml
+htmlcov/
+.tox/
+
+# Jupyter
+.ipynb_checkpoints
+
+# -----------------------------
+# Node / Frontend
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# -----------------------------
+# IDEs, editors, and OS files
+# -----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Editor swap files
+*~
+*.swp
+.project
+.classpath
+
+# -----------------------------
+# Logs and databases
+# -----------------------------
+*.log
+logs/
+*.sqlite3
+*.db
+
+# -----------------------------
+# Project outputs, uploads, and caches
+# -----------------------------
+backend/api_outputs/
+backend/output/
+backend/output_video/
+backend/uploads/
+backend/frames/
+backend/static/results/
+static/results/
+output/
+output_video/
+
+# Temporary image/video caches
+*.mp4
+*.mov
+*.avi
+
+# -----------------------------
+# Machine learning large files
+# -----------------------------
+# Ignore model weights and other large binary artifacts. Use git-lfs
+# if you need versioning for these files instead of committing directly.
+*.pth
+*.pt
+*.ckpt
+weights/
+backend/weights/
+deblur/*.pth
+enhancement/*.pth
+
+# -----------------------------
+# Secrets and environment
+# -----------------------------
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+
+# -----------------------------
+# Misc
+# -----------------------------
+coverage/
+.cache/
+# OneDrive/Windows cloud metadata
+~$*
