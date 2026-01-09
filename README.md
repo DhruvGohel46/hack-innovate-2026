@@ -2,6 +2,11 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Python](https://img.shields.io/badge/backend-Python%203.9+-yellow.svg) ![React](https://img.shields.io/badge/frontend-React%2018-blue.svg) ![Pytorch](https://img.shields.io/badge/AI-Pytorch%20%7C%20OpenCV-orange.svg)
 
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/24dbd811-301f-4fbb-81a7-6e2f6f7fd70c" />
+<img width="1908" height="641" alt="image" src="https://github.com/user-attachments/assets/5003bca1-e65a-43c5-a946-822c1a4e9e6c" />
+<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/617fe2b7-4c0f-41e6-afe2-3f357e2944f9" />
+
+
 **RailVision AI** is a state-of-the-art automated video restoration and Optical Character Recognition (OCR) pipeline designed for high-speed railway logistics. It specializes in extracting wagon identifiers from noisy, blurry, and low-light footage captured by trackside cameras.
 
 ---
