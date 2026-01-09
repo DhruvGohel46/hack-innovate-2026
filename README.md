@@ -174,15 +174,22 @@ hack-innovate-2026/
 ## Processing Pipeline
 
 ```
-Video Input
- → Frame Extraction
- → Blur Detection (Low / Medium / High)
- → Medium + High Blur Frames → NAFNet Deblurring
- → Low Blur Frames → Skip Deblurring
- → All Frames → Real-ESRGAN Enhancement
- → Frame Reordering
- → OCR on Every 6th Frame
- → Output: Text + Confidence Score
+flowchart TD
+    A[Video Input] --> B[Frame Extraction]
+
+    B --> C[Blur Detection]
+    C -->|Low Blur| D[Skip Deblurring]
+    C -->|Medium / High Blur| E[NAFNet Deblurring]
+
+    D --> F[Frame Collection]
+    E --> F[Frame Collection]
+
+    F --> G[Real-ESRGAN Enhancement]
+    G --> H[Frame Reordering]
+
+    H --> I[OCR (Every 6th Frame)]
+    I --> J[Text Output + Confidence Score]
+
 ```
 
 ---
