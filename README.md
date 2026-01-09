@@ -269,20 +269,20 @@ Standard OCR engines fail on such "dirty" signals. **RailVision AI** solves this
 
 ```mermaid
 graph TD
-    Input[Input Video Stream] --> BlurDetect[Blur Detection & Quality Check]
+    Input[Input Video Stream] --> BlurDetect["Blur Detection & Quality Check"]
     
     subgraph "Signal Restoration Engine (Backend)"
         BlurDetect -- "High Blur/Noise" --> ROI[Static ROI Extraction]
-        ROI --> Denoise[Adaptive Denoising\n(NLMeans)]
-        Denoise --> NAFNet[Deep Deblurring\n(NAFNet - 1 Pass)]
-        NAFNet -- "If Resolution Low" --> SR[Super-Resolution\n(Real-ESRGAN)]
+        ROI --> Denoise["Adaptive Denoising<br>(NLMeans)"]
+        Denoise --> NAFNet["Deep Deblurring<br>(NAFNet - 1 Pass)"]
+        NAFNet -- "If Resolution Low" --> SR["Super-Resolution<br>(Real-ESRGAN)"]
         NAFNet -- "If Resolution OK" --> SkipSR[Skip Enhancement]
         SR --> CLAHE[Contrast Normalization]
         SkipSR --> CLAHE
     end
     
-    CLAHE --> OCR[OCR Engine\n(Tesseract/PaddleOCR)]
-    OCR --> JSON[Wagon ID & Confidence]
+    CLAHE --> OCR["OCR Engine<br>(Tesseract/PaddleOCR)"]
+    OCR --> JSON["Wagon ID & Confidence"]
     
     subgraph "Visualization (Frontend)"
         JSON --> Dashboard[React Dashboard]
