@@ -3,9 +3,9 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Python](https://img.shields.io/badge/backend-Python%203.9+-yellow.svg) ![React](https://img.shields.io/badge/frontend-React%2018-blue.svg) ![Pytorch](https://img.shields.io/badge/AI-Pytorch%20%7C%20OpenCV-orange.svg)
 
 
-![WhatsApp Image 2026-01-09 at 7 48 40 AM](https://github.com/user-attachments/assets/dc7be402-22c1-45fd-b4c4-3407b7350aad)
+<img width="2752" height="1536" alt="unnamed (1)" src="https://github.com/user-attachments/assets/825b237b-b56d-4f53-be7b-b3933468ac18" />
 
-![WhatsApp Image 2026-01-09 at 7 50 15 AM](https://github.com/user-attachments/assets/c60e5145-ea9d-4ddd-80ec-e641ae0b7e10)
+![WhatsApp Image 2026-01-09 at 7 48 40 AM](https://github.com/user-attachments/assets/dc7be402-22c1-45fd-b4c4-3407b7350aad)
 
 ![WhatsApp Image 2026-01-09 at 7 50 15 AM](https://github.com/user-attachments/assets/f9a535dd-8993-48db-ae76-c9e5f315e94f)
 
