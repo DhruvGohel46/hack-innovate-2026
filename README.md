@@ -16,10 +16,6 @@
 
 
 
-Below is a **clean, professional, hackathon-grade README.md** rewritten from your content.
-No emojis, no casual tone, proper headings, architecture clarity, and industry-style structure.
-
-You can **copy–paste this directly into README.md**.
 
 ---
 
