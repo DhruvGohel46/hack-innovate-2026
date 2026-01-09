@@ -1,7 +1,8 @@
-![WhatsApp Image 2026-01-09 at 7 48 40 AM](https://github.com/user-attachments/assets/11054792-f77f-4b24-9935-a04602b62a3d)# RailVision AI - Advanced Wagon Monitoring System
+# RailVision AI - Advanced Wagon Monitoring System
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Python](https://img.shields.io/badge/backend-Python%203.9+-yellow.svg) ![React](https://img.shields.io/badge/frontend-React%2018-blue.svg) ![Pytorch](https://img.shields.io/badge/AI-Pytorch%20%7C%20OpenCV-orange.svg)
 
+![WhatsApp Image 2026-01-09 at 7 48 40 AM](https://github.com/user-attachments/assets/11054792-f77f-4b24-9935-a04602b62a3d)
 
 ![WhatsApp Image 2026-01-09 at 7 48 40 AM](https://github.com/user-attachments/assets/dc7be402-22c1-45fd-b4c4-3407b7350aad)
 
