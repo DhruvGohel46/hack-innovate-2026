@@ -3,142 +3,289 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Python](https://img.shields.io/badge/backend-Python%203.9+-yellow.svg) ![React](https://img.shields.io/badge/frontend-React%2018-blue.svg) ![Pytorch](https://img.shields.io/badge/AI-Pytorch%20%7C%20OpenCV-orange.svg)
 
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/24dbd811-301f-4fbb-81a7-6e2f6f7fd70c" />
-<img width="1908" height="641" alt="image" src="https://github.com/user-attachments/assets/5003bca1-e65a-43c5-a946-822c1a4e9e6c" />
-<img width="1919" height="1016" alt="image" src="https://github.com/user-attachments/assets/617fe2b7-4c0f-41e6-afe2-3f357e2944f9" />
+
+
 
 
 **RailVision AI** is a state-of-the-art automated video restoration and Optical Character Recognition (OCR) pipeline designed for high-speed railway logistics. It specializes in extracting wagon identifiers from noisy, blurry, and low-light footage captured by trackside cameras.
 
 ---
 
-## 🎯 Problem Statement
-In automated railway logistics, accurately reading wagon numbers is critical. However, trackside cameras often produce degraded footage due to:
-*   **Motion Blur**: High-speed trains passing cameras.
-*   **Low Light/Noise**: Nighttime operations causing sensor grain.
-*   **Vibration**: Unstable camera mounts.
 
-Standard OCR engines fail on such "dirty" signals. **RailVision AI** solves this by reconstructing the signal *before* OCR.
 
----
+🎯 Problem Statement
 
-## 🚀 Key Features
+Modern railway logistics depend on accurate wagon number detection in real time.
+However, trackside surveillance cameras face major challenges:
 
-### 🧠 Intelligent Signal Processing
-*   **Static ROI Extraction**: Automatically isolates the text region (processing only **~8%** of the frame), reducing compute load by 92%.
-*   **Adaptive Denoising**: Context-aware `Non-Local Means` denoising that adjusts strength based on lighting conditions (Day/Night).
-*   **Conditional Deblurring (NAFNet)**: A deep learning based deblurring model that activates only when motion blur is detected.
-*   **Super-Resolution (Real-ESRGAN)**: Enhances text resolution for distant or small characters.
-*   **Contrast Normalization (CLAHE)**: Locally adaptive histogram equalization to maximize character separability.
+Motion Blur – fast-moving trains
 
-### ⚡ Performance Optimized
-*   **Throttled Inference**: Heavy AI models run at optimized intervals (e.g., 15 FPS) with result caching, achieving **~4x speedup**.
-*   **Latency**: Processed at ~1.2s per frame on CPU (Production ready).
+Low Light & Noise – night operations
 
-### 🖥️ Modern Dashboard
-*   **React-based UI**: sleek, dark-mode interface for video upload and real-time monitoring.
-*   **Live Metrics**: Track OCR accuracy, frame processing speed, and wagon counts.
+Camera Vibration – unstable mounts
 
----
+Real-Time Constraints – limited processing time per frame
 
-## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    Input[Input Video Stream] --> BlurDetect["Blur Detection & Quality Check"]
-    
-    subgraph "Signal Restoration Engine (Backend)"
-        BlurDetect -- "High Blur/Noise" --> ROI[Static ROI Extraction]
-        ROI --> Denoise["Adaptive Denoising<br>(NLMeans)"]
-        Denoise --> NAFNet["Deep Deblurring<br>(NAFNet - 1 Pass)"]
-        NAFNet -- "If Resolution Low" --> SR["Super-Resolution<br>(Real-ESRGAN)"]
-        NAFNet -- "If Resolution OK" --> SkipSR[Skip Enhancement]
-        SR --> CLAHE[Contrast Normalization]
-        SkipSR --> CLAHE
-    end
-    
-    CLAHE --> OCR["OCR Engine<br>(Tesseract/EasyOCR)"]
-    OCR --> JSON["Wagon ID & Confidence"]
-    
-    subgraph "Visualization (Frontend)"
-        JSON --> Dashboard[React Dashboard]
-        CLAHE --> VideoOut[Recomposed Video]
-        VideoOut --> Dashboard
-    end
-```
+Traditional OCR systems fail because they operate directly on degraded frames.
+
+🔥 RailVision AI Solution
+
+RailVision AI solves this by introducing an intelligent, real-time video restoration pipeline:
+
+1. Analyze every frame quality
+
+
+2. Conditionally restore only degraded frames
+
+
+3. Enhance visual clarity
+
+
+4. Run OCR at controlled intervals
+
+
+
+This ensures high accuracy with low latency, making the system suitable for real-time deployment.
+
 
 ---
 
-## 📂 Project Structure
+🚀 Key Features
 
-```text
+🧠 Intelligent Frame Processing
+
+Blur Detection (Laplacian Variance)
+Each frame is classified as:
+
+Low Blur
+
+Medium Blur
+
+High Blur
+
+
+Conditional Deblurring (NAFNet)
+Only medium and high blur frames are passed to the deep deblurring model, reducing unnecessary compute.
+
+Super-Resolution Enhancement (Real-ESRGAN)
+All frames (deblurred + low-blur frames) are enhanced to improve text clarity.
+
+Frame Ordering & Synchronization
+Processed frames are reordered to maintain video integrity.
+
+Throttled OCR (EasyOCR)
+OCR runs on every 5th–6th frame, sufficient for video text while reducing latency.
+
+
+
+---
+
+⚡ Performance Optimizations
+
+Selective Model Invocation
+Heavy models run only when needed.
+
+Frame Sampling for OCR
+OCR runs at lower frequency without losing meaningful information.
+
+Real-Time Friendly Design
+Suitable for live or near-real-time railway monitoring.
+
+
+
+---
+
+🏗️ System Architecture (Updated)
+
+Input Video
+   ↓
+Frame Extraction
+   ↓
+Blur Detection (Low / Medium / High)
+   ↓
+Medium + High Blur Frames ──► NAFNet Deblurring
+Low Blur Frames ───────────► Skip Deblur
+   ↓
+All Frames ──► Real-ESRGAN Enhancement
+   ↓
+Frame Reordering
+   ↓
+Every 5–6 Frames ──► EasyOCR
+   ↓
+Wagon Number + Confidence
+   ↓
+React Dashboard
+
+
+---
+
+📂 Project Structure (ROI Removed)
+
 hack-innovate-2026/
-├── backend/                  # Python Restoration Engine & Flask API
-│   ├── app.py                # API Endpoints
-│   ├── main_pipeline.py      # Core Video Processing Logic
-│   ├── blur_detection/       # Laplacian Variance Logic
-│   ├── deblur/               # NAFNet Model & Inference
-│   ├── enhancement/          # Real-ESRGAN & Fallbacks
-│   ├── roi/                  # Static ROI Extraction Module
-│   └── requirements.txt      # Python Dependencies
-├── railguard-frontend/       # React Dashboard
-│   ├── src/                  # Components & UI Logic
-│   └── public/               # Static Assets
-└── README.md                 # Documentation
-```
+├── backend/
+│   ├── app.py                 # Flask API
+│   ├── main_pipeline.py       # Core video pipeline
+│   ├── blur_detection/        # Laplacian variance logic
+│   ├── deblur/                # NAFNet inference
+│   ├── enhancement/           # Real-ESRGAN inference
+│   ├── ocr/                   # EasyOCR logic
+│   ├── utils/                 # Frame handling utilities
+│   └── requirements.txt
+│
+├── railguard-frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+└── README.md
+
 
 ---
 
-## 🛠️ Getting Started
+🛠️ Tech Stack
 
-### Prerequisites
-*   Python 3.8+
-*   Node.js 16+
-*   GPU (Recommended for NAFNet/Real-ESRGAN, but runs on CPU)
+Backend
 
-### 1. Backend Setup
-```bash
+Python 3.9+
+
+Flask
+
+PyTorch
+
+OpenCV
+
+EasyOCR
+
+
+Models Used
+
+Blur Detection – Laplacian Variance
+
+Deblurring – NAFNet (Image Restoration)
+
+Enhancement – Real-ESRGAN
+
+OCR – EasyOCR
+
+
+Frontend
+
+React 18
+
+Modern dashboard UI
+
+
+
+---
+
+🧪 Main Processing Pipeline
+
+Video Input
+ → Frame Split
+ → Blur Detection (Low / Medium / High)
+ → Medium + High → NAFNet Deblur
+ → Low → Skip Deblur
+ → All Frames → Real-ESRGAN Enhance
+ → Frame Ordering
+ → Every 6th Frame → EasyOCR
+ → Output: Text + Confidence
+
+
+---
+
+🚀 Getting Started
+
+🔧 Prerequisites
+
+Python 3.9+
+
+GPU recommended (CPU supported)
+
+
+
+---
+
+1️⃣ Backend Setup
+
 cd backend
-
-# Install dependencies
 pip install -r requirements.txt
 
-# Option A: Run Pipeline Manually
+📥 Download Model Weights
+
+NAFNet (Deblurring)
+Download and place in backend/deblur/:
+
+NAFNet-GoPro-width64.pth
+
+🔗 https://huggingface.co/mikestealth/nafnet-models/blob/main/NAFNet-GoPro-width64.pth
+
+
+---
+
+Real-ESRGAN (Enhancement)
+Download and place in backend/enhancement/:
+
+RealESRGAN_x4plus.pth
+
+🔗 https://huggingface.co/lllyasviel/Annotators/blob/main/RealESRGAN_x4plus.pth
+
+
+---
+
+▶️ Run Pipeline Manually
+
 python main_pipeline.py --input input_video/test.mp4 --output output.mp4
 
-# Option B: Run API Server
+▶️ Run Flask API
+
 python app.py
-```
 
-### 2. Frontend Setup
-```bash
+
+---
+
+2️⃣ Frontend Setup
+
 cd railguard-frontend
-
-# Install dependencies
 npm install
-
-# Start Dashboard
 npm run dev
-```
+
 
 ---
 
-## 🧪 Optimization Analytics
+📊 Optimization Results
 
-| Metric | Unoptimized | RailVision Optimized | Improvement |
-| :--- | :--- | :--- | :--- |
-| **ROI Coverage** | 100% (Full Frame) | **7.91%** | **92% Reduction** |
-| **Inference Time** | ~6.0s / frame | **~1.2s / frame** | **5x Faster** |
-| **OCR Accuracy** | < 40% (Noisy) | **> 90%** | **Major Boost** |
+Metric	Traditional OCR	RailVision AI
+
+Deblur Invocation	Every frame	Only medium & high blur
+OCR Frequency	Every frame	Every 6th frame
+Processing Speed	Slow	4–5× faster
+OCR Accuracy	Low	High & Stable
+
+
 
 ---
 
-## 🔮 Future Roadmap
-- [ ] **Dynamic ROI**: Implement DBNet-lite for periodic ROI re-centering to handle camera vibrations.
-- [ ] **Edge Deployment**: Port NAFNet to TensorRT for Jetson Nano deployment.
-- [ ] **Live RTSP Support**: Connect directly to IP cameras.
+🔮 Future Roadmap
+
+[ ] Video-aware deblurring (BasicVSR++)
+
+[ ] TensorRT acceleration
+
+[ ] Live RTSP stream support
+
+[ ] Edge deployment (Jetson)
+
+
 
 ---
 
 <p align="center">
-  Built with ❤️ for Hack Innovate 2026 by <strong>Team Unk0wn C0ders</strong>
+Built with ❤️ for <strong>Hack Innovate 2026</strong><br/>
+by <strong>Team Unk0wn C0ders</strong>
 </p>
+---
+
+
+
+Bas bol 🔥
