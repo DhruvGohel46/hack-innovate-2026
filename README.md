@@ -174,48 +174,7 @@ hack-innovate-2026/
 ## Processing Pipeline
 
 ```
-flowchart LR
-    %% Input Layer
-    subgraph INPUT["Input Layer"]
-        A[🎥 Video Input]
-    end
-
-    %% Preprocessing
-    subgraph PRE["Pre-Processing"]
-        B[Frame Extraction]
-        C[Blur Detection<br/>(Low / Medium / High)]
-    end
-
-    %% Decision Layer
-    subgraph DECISION["Quality-Based Decision"]
-        D[Low Blur<br/>Skip Deblurring]
-        E[Medium & High Blur<br/>NAFNet Deblurring]
-    end
-
-    %% Enhancement
-    subgraph ENHANCE["Visual Enhancement"]
-        F[Frame Merge]
-        G[Real-ESRGAN<br/>Super-Resolution]
-        H[Frame Reordering]
-    end
-
-    %% OCR
-    subgraph OCR["Text Extraction"]
-        I[OCR Processing<br/>(Every 6th Frame)]
-        J[Text Output<br/>+ Confidence Score]
-    end
-
-    %% Flow Connections
-    A --> B --> C
-    C -->|Low Blur| D
-    C -->|Medium / High Blur| E
-    D --> F
-    E --> F
-    F --> G --> H --> I --> J
-
-    %% Styling (3D-ish Card Look)
-    classDef card fill:#f9f9f9,stroke:#333,stroke-width:1.5px,rx:8,ry:8
-    class A,B,C,D,E,F,G,H,I,J card
+Video Input → Frame Extraction → Blur Detection (Low / Medium / High) → Medium + High Blur Frames → NAFNet Deblurring → Low Blur Frames → Skip Deblurring → All Frames → Real-ESRGAN Enhancement → Frame Reordering → OCR on Every 6th Frame → Output: Text + Confidence Score
 
 
 ```
