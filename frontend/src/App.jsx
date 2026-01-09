@@ -171,7 +171,7 @@ function App() {
         >
           <div className="header-content">
             <FontAwesomeIcon icon={faTrain} className="header-icon" />
-            <h1>Video Restoration AI</h1>
+            <h1>RailV Ai</h1>
             <span className="tagline">Deblur & Enhance Your Images and Videos</span>
           </div>
         </motion.header>
@@ -435,9 +435,6 @@ function App() {
                       <div className="ocr-results-section">
                         <h4>OCR Analysis</h4>
                         <div className="ocr-stats">
-                          <div className="ocr-stat">
-                            <p>Blur Confidence: {results.ocr_result.blur_confidence}</p>
-                          </div>
                           <div className="ocr-stat">
                             <p>Enhanced Confidence: {results.ocr_result.enhanced_confidence}</p>
                           </div>
