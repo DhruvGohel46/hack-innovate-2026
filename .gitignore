@@ -1,0 +1,36 @@
+# General
+.DS_Store
+.env
+.vscode/
+*.log
+
+# Python / Backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Project Specific (Backend)
+backend/frames/
+frames/
+backend/input_video/*
+!backend/input_video/.gitkeep
+backend/output_video/*
+!backend/output_video/.gitkeep
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+railguard-frontend/node_modules/
+railguard-frontend/build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

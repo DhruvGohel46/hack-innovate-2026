@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faTrain, faCloudUploadAlt, faSpinner, faCheckCircle,
-  faCog, faLightbulb, faBolt, faFont, faBullseye,
-  faMicrochip, faImage, faEye, faTachometerAlt,
-  faFileVideo, faFileCsv, faClock
+  faImage, faEye,
+  faFileVideo, faFileCsv
 } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 
@@ -63,14 +62,14 @@ function App() {
               <div className="upload-card">
                 <h2>Upload Wagon Footage</h2>
                 <p className="upload-subtitle">Select your video file</p>
-                
+
                 <div className="dropzone">
-                  <FontAwesomeIcon 
-                    icon={file ? faCheckCircle : faCloudUploadAlt} 
-                    className={`upload-icon ${file ? 'success' : ''}`} 
+                  <FontAwesomeIcon
+                    icon={file ? faCheckCircle : faCloudUploadAlt}
+                    className={`upload-icon ${file ? 'success' : ''}`}
                   />
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     accept="video/*"
                     onChange={handleFileSelect}
                     style={{ display: 'none' }}
@@ -124,7 +123,7 @@ function App() {
                 </motion.div>
                 <h2>Processing Video</h2>
                 <p className="processing-stage">AI Analysis in Progress...</p>
-                
+
                 <div className="progress-bar-container">
                   <motion.div
                     className="progress-bar"
@@ -146,9 +145,9 @@ function App() {
               className="dashboard"
             >
               <h2>Analysis Results</h2>
-              
+
               <div className="metrics-grid">
-                <motion.div 
+                <motion.div
                   className="metrics-card"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -162,7 +161,7 @@ function App() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   className="metrics-card"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -176,7 +175,7 @@ function App() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   className="metrics-card"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -192,7 +191,7 @@ function App() {
               </div>
 
               {/* Blurred Frames Section */}
-              <motion.div 
+              <motion.div
                 className="results-section"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -216,7 +215,7 @@ function App() {
               </motion.div>
 
               {/* Deblurred Frames Section */}
-              <motion.div 
+              <motion.div
                 className="results-section"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -240,7 +239,7 @@ function App() {
               </motion.div>
 
               {/* Extracted Text Section */}
-              <motion.div 
+              <motion.div
                 className="results-section"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -285,7 +284,7 @@ function App() {
                 </motion.button>
               </div>
 
-              <button 
+              <button
                 onClick={() => { setView('upload'); setFile(null); setProgress(0); }}
                 style={{
                   marginTop: '2rem',
