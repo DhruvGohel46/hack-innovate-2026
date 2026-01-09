@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -----------------------------
 # OS
 # -----------------------------
@@ -16,10 +17,24 @@ Icon?
 __pycache__/
 *.py[cod]
 *$py.class
+=======
+# General
+.DS_Store
+.env
+.vscode/
+*.log
+
+# Python / Backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+>>>>>>> 9d402c57cfc143ed15f00ccaf4ebbdae0d0983e5
 .Python
 env/
 venv/
 .venv/
+<<<<<<< HEAD
 ENV/
 env.bak/
 pip-wheel-metadata/
@@ -131,3 +146,26 @@ coverage/
 .cache/
 # OneDrive/Windows cloud metadata
 ~$*
+=======
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Project Specific (Backend)
+backend/frames/
+frames/
+backend/input_video/*
+!backend/input_video/.gitkeep
+backend/output_video/*
+!backend/output_video/.gitkeep
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+railguard-frontend/node_modules/
+railguard-frontend/build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+>>>>>>> 9d402c57cfc143ed15f00ccaf4ebbdae0d0983e5
