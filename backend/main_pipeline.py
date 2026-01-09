@@ -1,6 +1,7 @@
 import cv2
 import os
 import sys
+import json
 from pathlib import Path
 from tqdm import tqdm
 
@@ -10,6 +11,12 @@ sys.path.append(str(Path(__file__).parent))
 from blur_detection.blur_test import blur_level
 from deblur.nafnet_infer import deblur_image
 from enhancement.realesrgan_infer import enhance_image
+try:
+    from ocr.ocr_engine import get_ocr_engine
+    OCR_AVAILABLE = True
+except ImportError:
+    OCR_AVAILABLE = False
+    print("[WARNING] OCR module not available. Install easyocr: pip install easyocr")
 
 
 def process_video(
@@ -61,6 +68,7 @@ def process_video(
     os.makedirs("frames/blurred", exist_ok=True)
     os.makedirs("frames/deblurred", exist_ok=True)
     os.makedirs("frames/enhanced", exist_ok=True)
+    os.makedirs("frames/ocr_results", exist_ok=True)
     os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else ".", exist_ok=True)
     
     # Open video
@@ -93,6 +101,7 @@ def process_video(
     frame_id = 0
     processed_count = 0
     deblurred_count = 0
+    processed_frame_ids = []  # Track processed frame IDs for OCR
     
     print("\nProcessing video frames...")
     
@@ -111,6 +120,7 @@ def process_video(
             
             # Save original frame (PNG for lossless quality)
             cv2.imwrite(f"frames/original/{frame_id:06d}.png", frame)
+            processed_frame_ids.append(frame_id)  # Track this processed frame
             
             # Detect blur level
             level = blur_level(frame)
@@ -150,11 +160,66 @@ def process_video(
     cap.release()
     out.release()
     
-    print(f"\n[OK] Processing complete!")
+    print(f"\n[OK] Video processing complete!")
     print(f"   Processed: {processed_count} frames")
     print(f"   Deblurred: {deblurred_count} frames")
     print(f"   Output: {output_path}")
     print(f"   Output size: {out_width}x{out_height}")
+    
+    # Step 4: OCR Processing (every 6th frame after all frames are processed)
+    if OCR_AVAILABLE:
+        print(f"\n🔍 Step 4: OCR Processing (every 6th frame)...")
+        ocr_engine = get_ocr_engine(gpu=True)
+        ocr_processed = 0
+        ocr_interval = 6
+        
+        # Process every 6th frame from processed frames
+        ocr_frame_ids = processed_frame_ids[::ocr_interval]
+        
+        print(f"   Processing {len(ocr_frame_ids)} frames for OCR...")
+        
+        for ocr_frame_id in tqdm(ocr_frame_ids, desc="OCR Processing"):
+            original_path = Path(f"frames/original/{ocr_frame_id:06d}.png")
+            enhanced_path = Path(f"frames/enhanced/{ocr_frame_id:06d}.png")
+            
+            if not original_path.exists() or not enhanced_path.exists():
+                continue
+            
+            try:
+                # Compare OCR between original blur and enhanced images
+                comparison = ocr_engine.compare_images(
+                    blur_img_path_or_array=str(original_path),
+                    enhanced_img_path_or_array=str(enhanced_path),
+                    min_conf=0.3,
+                    min_length=2
+                )
+                
+                # Add frame info
+                comparison["frame_id"] = ocr_frame_id
+                comparison["frame_name"] = f"{ocr_frame_id:06d}.png"
+                
+                # Save JSON result
+                json_path = Path(f"frames/ocr_results/{ocr_frame_id:06d}.json")
+                with open(json_path, "w", encoding="utf-8") as f:
+                    json.dump(comparison, f, indent=2, ensure_ascii=False)
+                
+                # Print summary
+                blur_conf = comparison["blur"]["avg_confidence_raw"]
+                enh_conf = comparison["enhanced"]["avg_confidence_raw"]
+                delta = comparison["improvement"]["confidence_delta_raw"]
+                
+                print(f"   Frame {ocr_frame_id:06d}: Blur={blur_conf:.3f} → Enhanced={enh_conf:.3f} (Δ{delta:+.3f})")
+                ocr_processed += 1
+                
+            except Exception as e:
+                print(f"   [ERROR] OCR failed for frame {ocr_frame_id:06d}: {e}")
+                continue
+        
+        print(f"\n[OK] OCR processing complete!")
+        print(f"   OCR processed: {ocr_processed} frames")
+        print(f"   Results saved in: frames/ocr_results/")
+    else:
+        print(f"\n[SKIP] OCR processing skipped (module not available)")
 
 
 if __name__ == "__main__":

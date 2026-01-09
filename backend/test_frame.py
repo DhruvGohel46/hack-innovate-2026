@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import os
 import sys
+import json
 from pathlib import Path
 import argparse
 
@@ -16,6 +17,12 @@ sys.path.append(str(Path(__file__).parent))
 from blur_detection.blur_test import blur_level, blur_score
 from deblur.nafnet_infer import deblur_image
 from enhancement.realesrgan_infer import enhance_image
+try:
+    from ocr.ocr_engine import get_ocr_engine, avg_confidence, filter_main_text
+    OCR_AVAILABLE = True
+except ImportError:
+    OCR_AVAILABLE = False
+    print("[WARNING] OCR module not available. Install easyocr: pip install easyocr")
 
 
 def test_single_frame(
@@ -136,6 +143,79 @@ def test_single_frame(
     eh, ew = enhanced_img.shape[:2]
     print(f"   Enhanced size: {ew}x{eh}")
     
+    # Step 4: OCR Comparison (blur vs enhanced)
+    ocr_result = None
+    if OCR_AVAILABLE:
+        print(f"\n🔍 Step 4: OCR Comparison (Blur vs Enhanced)")
+        try:
+            ocr_engine = get_ocr_engine(gpu=True)
+            
+            # Run OCR on both original blur image and enhanced image
+            print("   Running OCR on original blur image...")
+            blur_ocr = ocr_engine.run_ocr(img)
+            
+            print("   Running OCR on enhanced image...")
+            enhanced_ocr = ocr_engine.run_ocr(enhanced_img)
+            
+            # Calculate averages
+            blur_avg = avg_confidence(blur_ocr)
+            enhanced_avg = avg_confidence(enhanced_ocr)
+            blur_filtered = filter_main_text(blur_ocr, min_conf=0.3, min_length=2)
+            enhanced_filtered = filter_main_text(enhanced_ocr, min_conf=0.3, min_length=2)
+            
+            # Build comparison result
+            ocr_result = {
+                "blur": {
+                    "avg_confidence_raw": blur_avg,
+                    "text_count_raw": len(blur_ocr),
+                    "texts_raw": blur_ocr,
+                    "text_count_filtered": len(blur_filtered),
+                    "texts_filtered": blur_filtered
+                },
+                "enhanced": {
+                    "avg_confidence_raw": enhanced_avg,
+                    "text_count_raw": len(enhanced_ocr),
+                    "texts_raw": enhanced_ocr,
+                    "text_count_filtered": len(enhanced_filtered),
+                    "texts_filtered": enhanced_filtered
+                },
+                "improvement": {
+                    "confidence_delta_raw": round(enhanced_avg - blur_avg, 3),
+                    "text_count_delta_filtered": len(enhanced_filtered) - len(blur_filtered)
+                }
+            }
+            
+            # Save OCR result JSON
+            ocr_json_path = os.path.join(output_dir, "ocr_comparison.json")
+            with open(ocr_json_path, "w", encoding="utf-8") as f:
+                json.dump(ocr_result, f, indent=2, ensure_ascii=False)
+            print(f"[OK] Saved OCR comparison: {ocr_json_path}")
+            
+            # Print OCR summary
+            print(f"\n   📊 OCR Results:")
+            print(f"      Original Blur:")
+            print(f"         Confidence: {blur_avg:.3f}")
+            print(f"         Text count (raw): {len(blur_ocr)}")
+            print(f"         Text count (filtered): {len(blur_filtered)}")
+            if blur_filtered:
+                print(f"         Texts: {[t['text'] for t in blur_filtered[:5]]}")
+            
+            print(f"      Enhanced:")
+            print(f"         Confidence: {enhanced_avg:.3f}")
+            print(f"         Text count (raw): {len(enhanced_ocr)}")
+            print(f"         Text count (filtered): {len(enhanced_filtered)}")
+            if enhanced_filtered:
+                print(f"         Texts: {[t['text'] for t in enhanced_filtered[:5]]}")
+            
+            delta = ocr_result["improvement"]["confidence_delta_raw"]
+            print(f"      Improvement: Δ{delta:+.3f} confidence, +{ocr_result['improvement']['text_count_delta_filtered']} texts")
+            
+        except Exception as e:
+            print(f"   [ERROR] OCR processing failed: {e}")
+            ocr_result = None
+    else:
+        print(f"\n⏭️  Step 4: OCR Comparison skipped (module not available)")
+    
     # Create comparison image
     print(f"\n📊 Creating comparison image...")
     comparison = create_comparison(img, deblurred_img if deblurred_img is not None else img, enhanced_img)
@@ -151,6 +231,11 @@ def test_single_frame(
     print(f"   Blur level: {level.upper()}")
     print(f"   Deblurred: {'Yes' if level in ['medium', 'high'] else 'No (not needed)'}")
     print(f"   Enhanced: Yes ({enhance_scale}x)")
+    if ocr_result:
+        blur_conf = ocr_result["blur"]["avg_confidence_raw"]
+        enh_conf = ocr_result["enhanced"]["avg_confidence_raw"]
+        delta = ocr_result["improvement"]["confidence_delta_raw"]
+        print(f"   OCR: Blur={blur_conf:.3f} → Enhanced={enh_conf:.3f} (Δ{delta:+.3f})")
     print(f"{'='*50}\n")
     
     # Display results if requested

@@ -22,3 +22,5 @@ ffmpeg-python>=0.2.0
 # Optional: For Real-ESRGAN (install if you have Real-ESRGAN weights)
 # realesrgan>=0.2.5.0
 
+# OCR: For text detection and recognition
+easyocr>=1.7.0

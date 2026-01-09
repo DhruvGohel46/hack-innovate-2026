@@ -37,7 +37,7 @@ def blur_level(image):
     lap, edge = blur_score(image)
 
     # Tighter thresholds - only real blur gets deblurred
-    if lap > 480:
+    if lap > 1080:
         return "low"
     elif lap > 40:
         return "medium"
