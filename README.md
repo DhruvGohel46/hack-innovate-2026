@@ -1,4 +1,4 @@
-# 🚄 RailVision AI - Advanced Wagon Monitoring System
+# RailVision AI - Advanced Wagon Monitoring System
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Python](https://img.shields.io/badge/backend-Python%203.9+-yellow.svg) ![React](https://img.shields.io/badge/frontend-React%2018-blue.svg) ![Pytorch](https://img.shields.io/badge/AI-Pytorch%20%7C%20OpenCV-orange.svg)
 
